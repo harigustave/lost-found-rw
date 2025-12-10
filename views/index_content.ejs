@@ -1,0 +1,192 @@
+<!-- Search Bar Section -->
+ <head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+<style>
+        .double-size {
+            height: 50px;       /* adjust as needed (default input ~30px) */
+            min-width: 200px;   /* adjust as needed */
+            font-size: 1.0rem; /* scale text proportionally */
+            padding: 0.75rem; /* adjust padding if needed */
+            /* background-image: linear-gradient(to top, #00c6fb 0%, #005bea 100%); */
+            /* background-color: #005bea; */
+        }
+
+        .card-title{
+            font-size: 1.0rem;
+        }
+
+        .card-text{
+           font-size: 1.0rem; 
+        }
+        .search-btn{
+            /* background-image: linear-gradient(to top, #00c6fb 0%, #005bea 100%); */
+            background-color: orange;
+        }
+        .search-btn:hover{
+            background-color: #D18700;
+        }
+    </style>
+ </head>
+<div class="d-flex justify-content-center mb-4">
+    <form action="/items/search" method="GET" class="d-flex" style="gap: 10px; align-items: center;">
+
+        <!-- Dropdown for search type -->
+        <select name="type" 
+            class="form-select" 
+            style="min-width: 300px;height: 50px;font-size: 1.0rem;padding: 0.75rem;" 
+            required>
+            <option value="" selected disabled>Select Card Category</option>
+            <option value="ID Card">ID Card</option>
+            <option value="Bank Card">Bank Card</option>
+            <option value="Passport">Passport</option>
+            <option value="Driving License">Driving License</option>
+        </select>
+
+        <!-- Search input -->
+        <!-- <input type="text" 
+            name="query" 
+            style="min-width: 400px;height: 50px;font-size: 1.0rem;padding: 0.75rem;" 
+            class="form-control" 
+            placeholder="Enter your lost card number..." required> -->
+
+        <!-- Search button -->
+        <!-- <button type="submit" class="btn search-btn" style="height: 50px;font-size: 1.0rem;padding: 0.75rem 1.5rem;">
+            <i class="bi bi-search" style="color: white;"></i>
+        </button> -->
+
+          <div class="input-group" style="min-width: 400px;">
+            <input 
+            type="text" 
+            name="query" 
+            class="form-control" 
+            placeholder="Enter your lost card number..." 
+            style="height: 50px; font-size: 1rem; padding: 0.75rem;" 
+            required>
+            
+            <button type="submit" class="btn btn-warning" style="height: 50px;font-size: 1.0rem;padding: 0.75rem 1.5rem;">
+            <i class="bi bi-search text-white"></i>
+            </button>
+        </div>
+
+    </form>
+</div>
+
+<!-- Available Results Header -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <!-- <h3>Available Results</h3> -->
+
+    <div hidden>
+        <a href="/items?kind=found" class="btn btn-success btn-sm double-size text-white" style="font-weight: normal;">
+            <i class="bi bi-check-circle"></i> View Found Items
+        </a>
+        <a href="/items?kind=lost" class="btn btn-danger btn-sm double-size text-white" style="font-weight: normal;">
+            <i class="bi bi-question-circle-fill"></i> View Lost Items
+        </a>
+        <a href="/items" class="btn btn-secondary btn-sm double-size text-white" style="font-weight: normal;">
+            <i class="bi bi-list-ul" style="margin-right: 5px;"></i>View All Items</a>
+    </div>
+</div>
+
+<!-- Items Grid -->
+<div class="row">
+    <% if (items.length === 0) { %>
+        <p class="text-muted">No items found.</p>
+    <% } %>
+
+    <% items.forEach(item => { %>
+        <div class="col-md-3 mb-3">
+            <div class="card h-100">
+                <% if (item.photo_path) { %>
+                    <img src="<%= item.photo_path %>" 
+                        class="card-img-top d-block mx-auto"  
+                        style="height:230px; width: 100%; object-fit:cover;">
+                <% } else { %>
+                    <img src="/public/no-image.png" 
+                        class="card-img-top d-block mx-auto" 
+                        style="height:230px; width: 100%; object-fit:cover;">
+                <% } %>
+
+                <div class="card-body">
+                    <%
+                        function capitalizeWords(str) {
+                            if (!str) return ''; // handle empty or undefined strings
+                            str = str.toLowerCase(); // convert all letters to lowercase first
+                            return str.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+                        }
+                    %>
+                    <h5 class="card-title text-secondary" style="text-align: center;"><%= capitalizeWords(item.item_name) %></h5>
+                    <hr/>
+                    <p class="card-text">
+                        <span style="color: black;">Type:</span> <span style="color: silver;"><%= item.item_type %></span><br>
+                        <span style="color: black;">Status:</span> <span class="<%= item.kind === 'found' ? 'text-success' : 'text-danger' %>">
+                            <%= capitalizeWords(item.kind) %>
+                        </span>
+                        <br>
+                        <% if (item.kind === 'found') { %>
+                            <span style="color: black;">Found at:</span> 
+                            <span style="color: silver;"><%= capitalizeWords(item.place) %></span><br>
+                            <span style="color: black;">Finder name:</span> 
+                            <span style="color: silver;"><%= capitalizeWords(item.poster_name) %></span><br>
+                            <span style="color: black;" hidden>Finder contact:</span> 
+                            <span style="color: silver;" hidden><%= item.poster_phone %></span><br>
+                            <button type="button" class="btn btn-danger text-white" style="margin: auto;">Contact Finder</button>
+                        <% } else if (item.kind === 'lost') { %>
+                            <span style="color: black;">Lost at:</span> 
+                            <span style="color: silver;"><%= capitalizeWords(item.place) %></span><br>
+                            <span style="color: black;">Owner name:</span> 
+                            <span style="color: silver;"><%= capitalizeWords(item.poster_name) %></span><br>
+                            <span style="color: black;">Owner contact:</span> 
+                            <span style="color: silver;"><%= item.poster_phone %></span>
+                        <% } %>
+                    </p>
+                </div>
+            </div>
+        </div>
+    <% }) %>
+</div>
+
+<!-- Smart Pagination -->
+<% if (totalPages > 1) { %>
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center mt-4">
+
+        <!-- Previous button -->
+        <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+            <a class="page-link" href="/items?<%= kind !== 'all' ? 'kind=' + kind + '&' : '' %>page=<%= currentPage - 1 %>">Previous</a>
+        </li>
+
+        <% 
+        const delta = 2;
+        let range = [];
+        for (let i = 1; i <= totalPages; i++) {
+            if (i === 1 || i === totalPages || (i >= currentPage - delta && i <= currentPage + delta)) {
+                range.push(i);
+            } else if (range[range.length - 1] !== '...') {
+                range.push('...');
+            }
+        }
+        %>
+
+        <% range.forEach(i => { %>
+            <% if (i === '...') { %>
+                <li class="page-item disabled"><span class="page-link">...</span></li>
+            <% } else { %>
+                <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+                    <a class="page-link" href="/items?<%= kind !== 'all' ? 'kind=' + kind + '&' : '' %>page=<%= i %>"><%= i %></a>
+                </li>
+            <% } %>
+        <% }); %>
+
+        <!-- Next button -->
+        <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
+            <a class="page-link" href="/items?<%= kind !== 'all' ? 'kind=' + kind + '&' : '' %>page=<%= currentPage + 1 %>">Next</a>
+        </li>
+
+    </ul>
+</nav>
+<% } %>
+
+<!-- Footer -->
+<footer class="text-center mt-4 mb-4" style="color: silver;font-size: 0.73rem;font-weight: normal;">
+    Lost & Found (RW). H&G Tech Ltd, All Rights Reserved <%= new Date().getFullYear() %>
+</footer>

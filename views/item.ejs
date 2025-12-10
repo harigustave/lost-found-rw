@@ -1,0 +1,16 @@
+<% include('layout') %>
+<div class="card mx-auto" style="max-width:800px;">
+<% if(item.photo_path){ %>
+<img src="<%= item.photo_path %>" class="card-img-top" style="height:420px; object-fit:contain;"/>
+<% } %>
+<div class="card-body">
+<h4><%= item.kind === 'found' ? 'Found' : 'Lost' %> — <%= item.item_type %></h4>
+<p><strong>Description:</strong> <%= item.item_name %></p>
+<% if(item.item_number){ %>
+<p><strong>Item number:</strong> <%= item.item_number %></p>
+<% } %>
+<p><strong>Place:</strong> <%= item.place %></p>
+<p><strong>Posted by:</strong> <%= item.poster_name %> — <a href="tel:<%= item.poster_phone %>"><%= item.poster_phone %></a></p>
+<p class="text-muted">Posted on <%= new Date(item.created_at).toLocaleString() %></p>
+</div>
+</div>

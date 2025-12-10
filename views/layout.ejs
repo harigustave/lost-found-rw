@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Lost & Found Rwanda</title>
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <style>
+        #snackbar {
+            visibility: visible;
+            min-width: 300px;
+            background: #4CAF50;
+            color: white;
+            text-align: center;
+            border-radius: 5px;
+            padding: 14px;
+            font-size: 1rem;
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 9999;
+
+            animation: fadein 0.5s, fadeout 0.5s 7s;
+            animation-fill-mode: forwards;      /* IMPORTANT */
+            animation-iteration-count: 1;       /* IMPORTANT */
+        }
+
+        @keyframes fadein {
+            from { opacity: 0; bottom: 10px; }
+            to { opacity: 1; bottom: 30px; }
+        }
+
+        @keyframes fadeout {
+            from { opacity: 1; bottom: 30px; }
+            to { opacity: 0; bottom: 10px; }
+        }
+        .navbar {
+            background-image: linear-gradient(to top, #00c6fb 0%, #005bea 100%);
+            /* background-color: #005bea; */
+        }
+
+        /* Force toggler icon to display (white color) */
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255,255,255,1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+        .navbar .container,
+            .navbar .container-fluid {
+                position: static; /* Allows dropdown to escape clipping */
+        }
+
+        /* Ensure dropdown appears on top */
+        .dropdown-menu {
+            z-index: 2000 !important;
+        }
+
+        /* Pagination styles */
+        .pagination .page-item.active .page-link {
+            background-color: #005bea;
+            border-color: #005bea;
+            color: white;
+        }
+
+        .pagination .page-link {
+            color: #005bea;
+        }
+
+        .pagination .page-item.disabled .page-link {
+            color: #ccc;
+            pointer-events: none;
+        }
+    </style>
+
+
+</head>
+<body>
+    <% if (success && success.length > 0) { %>
+        <div id="snackbar"><%= success %></div>
+    <% } %>
+
+    <% if (error && error.length > 0) { %>
+        <div id="snackbar" class="show bg-danger text-white">
+            <%= error %>
+        </div>
+    <% } %>
+
+<nav class="navbar navbar-expand-lg fixed-top navbar-dark" style="padding: 0px 0;">
+    <div class="container d-flex align-items-center">
+        <a class="navbar-brand d-flex align-items-center" href="/items">
+            <img src="/images/lostfoundcroped.png"
+                 alt="Logo"
+                 style="height: 80px; width: auto; margin-right: 10px;">
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navMenu">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a href="/items/post-lost" class="nav-link text-white" style="text-decoration: underline; font-weight: bold;">Report Lost Item</a>
+                </li>
+                <li><span class="nav-link text-white">|</span></li>
+                <li class="nav-item">
+                    <a href="/items/post-found" class="nav-link text-white" style="text-decoration: underline;font-weight: bold;">Report Found Item</a>
+                </li>
+                <li><span class="nav-link text-white">|</span></li>
+                <li class="nav-item">
+                    <a href="" class="nav-link text-white" style="text-decoration: underline;font-weight: bold;">Download Certificate</a>
+                </li>
+                <!-- <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white d-flex align-items-center" 
+                    href="#" id="languageDropdown" 
+                    role="button" data-bs-toggle="dropdown" aria-expanded="false" 
+                    style="font-weight: normal; text-decoration: none;">
+                    
+                        <i class="bi bi-globe2 me-1"></i> English
+                    </a>
+
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
+                        <li><a class="dropdown-item" href="?lang=en">English</a></li>
+                        <li><a class="dropdown-item" href="?lang=rw">Kinyarwanda</a></li>
+                        <li><a class="dropdown-item" href="?lang=fr">French</a></li>
+                    </ul>
+                </li> -->
+            </ul>
+        </div>
+
+    </div>
+</nav>
+
+
+<div class="container" style="margin-top: 120px;">
+    <!-- CHILD PAGE CONTENT GOES HERE -->
+    <%- include(viewContent) %>
+</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const snackbar = document.getElementById("snackbar");
+            if (snackbar) {
+                setTimeout(() => {
+                    snackbar.style.visibility = "hidden";
+                    snackbar.style.opacity = "0";
+                }, 8000); // matches your fadeout timing
+            }
+        });
+    </script>
+</body>
+</html>
