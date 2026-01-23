@@ -8,48 +8,48 @@
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-
     <style>
         body {
             overflow-x: hidden;
         }
 
-        /* Snackbar */
+        /* Snackbar fixed and centered on mobile, minimal height */
         #snackbar {
             visibility: visible;
-            min-width: 300px;
+            display: inline-block;       /* shrink to content width */
             max-width: 90%;
             background: #4CAF50;
             color: white;
             text-align: center;
             border-radius: 6px;
-            padding: 14px;
-            font-size: 1rem;
+            padding: 10px 20px;          /* adjust padding */
+            font-size: 0.95rem;
             position: fixed;
-            bottom: 30px;
-            right: 30px;
+            left: 50%;
+            bottom: 20px;
+            transform: translateX(-50%);
             z-index: 9999;
             animation: fadein 0.5s, fadeout 0.5s 7s;
             animation-fill-mode: forwards;
+            line-height: 1.2;            /* tight line-height */
         }
 
+        /* optional smaller font for phones */
         @media (max-width: 576px) {
             #snackbar {
-                left: 50%;
-                right: auto;
-                transform: translateX(-50%);
-                bottom: 20px;
+                font-size: 0.85rem;
+                padding: 8px 16px;
             }
         }
 
         @keyframes fadein {
-            from { opacity: 0; bottom: 10px; }
-            to { opacity: 1; bottom: 30px; }
+            from { opacity: 0; transform: translate(-50%, -60%); }
+            to   { opacity: 1; transform: translate(-50%, -50%); }
         }
 
         @keyframes fadeout {
-            from { opacity: 1; bottom: 30px; }
-            to { opacity: 0; bottom: 10px; }
+            from { opacity: 1; transform: translate(-50%, -50%); }
+            to   { opacity: 0; transform: translate(-50%, -60%); }
         }
 
         /* Navbar */
@@ -174,19 +174,19 @@
         <div class="collapse navbar-collapse" id="navMenu">
             <ul class="navbar-nav ms-auto align-items-lg-center">
                 <li class="nav-item">
-                    <a href="/" class="nav-link" style="color:#FFFFFF; font-size: 17px;">Home</a>
+                    <a href="/" class="nav-link" style="color:#FFFFFF; font-size: 17px;">Ahabanza</a>
                 </li>
                 <li class="nav-separator"><span class="nav-link" style="color: #F5C857;">|</span></li>
                 <li class="nav-item">
-                    <a href="/items/post-lost" class="nav-link" style="color:#FFFFFF; font-size: 17px;">Report Lost Item</a>
+                    <a href="/items/post-lost" class="nav-link" style="color:#FFFFFF; font-size: 17px;">Icyangombwa Cyabuze</a>
                 </li>
                 <li class="nav-separator"><span class="nav-link" style="color: #F5C857;">|</span></li>
                 <li class="nav-item">
-                    <a href="/items/post-found" class="nav-link" style="color:#FFFFFF; font-size: 17px;">Report Found Item</a>
+                    <a href="/items/post-found" class="nav-link" style="color:#FFFFFF; font-size: 17px;">Icyangombwa Cyabonetse</a>
                 </li>
                 <li class="nav-separator"><span class="nav-link" style="color: #F5C857;">|</span></li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link" style="color:#FFFFFF; font-size: 17px;">Download Certificate</a>
+                    <a href="#" class="nav-link" style="color:#FFFFFF; font-size: 17px;">Kuramo Seritifika</a>
                 </li>
             </ul>
         </div>
@@ -197,24 +197,14 @@
     <%- include(viewContent) %>
 </div>
 
-<footer class="text-center text-muted" style="font-size: 12px; z-index: 1000;margin-bottom: 10px;">
+<footer class="text-center text-muted" style="font-size: 12px; z-index: 1000;margin-bottom: 10px;margin-top: 15px;">
     H&G Tech Ltd, All Rights Reserved <%= new Date().getFullYear() %>
 </footer>
 
 <!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/public/js/bootstrap.bundle.min.js"></script>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const snackbar = document.getElementById("snackbar");
-        if (snackbar) {
-            setTimeout(() => {
-                snackbar.style.opacity = "0";
-                snackbar.style.visibility = "hidden";
-            }, 8000);
-        }
-    });
-</script>
+<script src="/public/js/snackbar.js" defer></script>
 
 </body>
 </html>

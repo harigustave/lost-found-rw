@@ -6,19 +6,7 @@ const fs = require('fs');
 const db = require('../models/db');
 
 const router = express.Router();
-
-// configure multer
-const UPLOAD_DIR = process.env.UPLOAD_DIR || path.join(__dirname, '..', 'public', 'uploads');
-if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR, { recursive: true });
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => cb(null, UPLOAD_DIR),
-    filename: (req, file, cb) => {
-        const ext = path.extname(file.originalname);
-        const name = `${Date.now()}-${Math.random().toString(36).substring(2, 8)}${ext}`;
-        cb(null, name);
-    }
-});
-const upload = multer({ storage, limits: { fileSize: 5 * 1024 * 1024 } });
+const upload = multer();
 
 // list ONLY found items with pagination
 router.get('/', async (req, res) => {
@@ -73,10 +61,11 @@ const createValidators = [
     body('poster_phone').isLength({ min: 8 }).trim(),
 ];
 
-router.post('/create', upload.single('photo'), createValidators, async (req, res) => {
+router.post('/create', upload.none(), createValidators, async (req, res) => {
     const errors = validationResult(req);
+    const kindValue = req.body.kind || "found"; // fallback
     if (!errors.isEmpty()) {
-        const formView = req.body.kind === "lost" ? "post_lost" : "post_found";
+        const formView = kindValue === "lost" ? "post_lost" : "post_found";
         return res.status(422).render(formView, {
             errors: errors.array(),
             data: req.body
@@ -84,23 +73,23 @@ router.post('/create', upload.single('photo'), createValidators, async (req, res
     }
 
     const { kind, item_type, item_name, item_number, place, poster_name, poster_phone } = req.body;
-    const photo_path = req.file ? `/public/uploads/${req.file.filename}` : null;
+    // const photo_path = req.file ? `/public/uploads/${req.file.filename}` : null;
 
     const insertQuery = `
         INSERT INTO items(
             kind, item_type, item_name, item_number, place,
-            poster_name, poster_phone, photo_path
+            poster_name, poster_phone
         )
-        VALUES($1,$2,$3,$4,$5,$6,$7,$8)
+        VALUES($1,$2,$3,$4,$5,$6,$7)
         RETURNING id;
     `;
 
     await db.query(insertQuery, [
         kind, item_type, item_name, item_number || null, place,
-        poster_name, poster_phone, photo_path
+        poster_name, poster_phone
     ]);
 
-    req.flash('success', `Thank you. Your ${kind} item has been reported successfully.`);
+    req.flash('success', `Murakoze. Gutanga amakuru ku cyangombwa byagenze neza`);
     res.redirect('/items');
 });
 
@@ -123,7 +112,7 @@ router.get('/search', async (req, res) => {
         const result = await db.query(sql, [type.trim(), query.trim()]);
 
         if (result.rows.length === 0) {
-            req.flash("error", "Sorry, the lost item you entered is not yet found. Please, try again later");
+            req.flash("error", "Icyangombwa cyanyu nticyiraboneka. Muzongere mushakishe ubutaha");
             return res.redirect('/items');
         }
 
@@ -137,7 +126,7 @@ router.get('/search', async (req, res) => {
 
     } catch (err) {
         console.error(err);
-        req.flash("error", "Error while searching for your lost item. Please, try again later");
+        req.flash("error", "Gushakisha icyangombwa ntago bigenze neza. Mwongere mugerageze");
         res.redirect('/items');
     }
 });

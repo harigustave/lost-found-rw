@@ -1,10 +1,11 @@
 <style>
-    .required_item{
+    /* General styles */
+    .required_item {
         color: red;
         margin-left: 2px;
     }
 
-    label,h3{
+    label, h3, h4 {
         color: silver;
     }
 
@@ -12,61 +13,117 @@
         width: 50% !important;
         margin: auto;
     }
-    
-    /* Small screens: width 100% */
+
+    .double-size {
+        width: 100%;
+    }
+
+    .double-btn {
+        width: 100%;
+        padding: 10px;
+        font-weight: bold;
+    }
+
+    /* Headings */
+    h4.text-danger {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    /* Small screens: width 100% + smaller font/padding */
     @media (max-width: 767px) {
         form {
-            width: 100%;
-            margin: auto;
+            width: 95% !important;
+            margin: 0 auto;
+        }
+
+        input.form-control,
+        select.form-select,
+        .double-btn {
+            font-size: 0.9rem;
+            padding: 8px;
+        }
+
+        h4.text-danger {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-size: 0.9rem;
         }
     }
+
+    /* Super small screens: 480px and below */
+    @media (max-width: 480px) {
+        form {
+            width: 100% !important;   /* full width */
+            margin: 0 auto;
+            padding: 0 10px;          /* small padding */
+        }
+
+        input.form-control,
+        select.form-select,
+        .double-btn {
+            width: 100%;              /* full width */
+            font-size: 0.85rem;       /* smaller font */
+            padding: 7px;             /* reduce padding */
+        }
+
+        h4.text-danger {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        /* Ensure spacing between stacked elements */
+        .mb-3 {
+            margin-bottom: 12px !important;
+        }
+    }
+
 </style>
+
+<h4 class="text-danger text-center mb-4">Menyekanisha Icyangombwa Wabuze</h4>
 
 <form action="/items/create" method="post" enctype="multipart/form-data" class="mb-4">
 
     <input type="hidden" name="kind" value="lost">
 
     <div class="mb-3">
-        <label>Card Type</label><span class="required_item">*</span>
         <select name="item_type" class="form-select double-size" required>
-            <option value="" selected disabled>Choose item type</option>
-            <option value="ID Card">ID Card</option>
-            <option value="Bank Card">Bank Card</option>
-            <option value="Passport">Passport</option>
-            <option value="Driving License">Driving License</option>
+            <option value="" disabled selected>Hitamo ubwoko bw'icyangombwa</option>
+            <option value="ID Card">Indangamuntu</option>
+            <option value="Passport">Pasiporo</option>
+            <option value="Insurance Card">Ikarita y'ubwishingizi</option>
+            <option value="Yellow Card">Karite Jone</option>               
+            <option value="Driving License">Perimi yo gutwara ikinyabiziga</option>
         </select>
     </div>
 
     <div class="mb-3">
-        <label>Name on Card</label><span class="required_item">*</span>
+        <label>Amazina yanditseho</label><span class="required_item">*</span>
         <input type="text" name="item_name" class="form-control double-size" required>
     </div>
 
     <div class="mb-3">
-        <label>Card Number</label><span class="required_item">*</span>
+        <label>Nimero y'icyangombwa</label><span class="required_item">*</span>
         <input type="text" name="item_number" class="form-control double-size" required>
     </div>
 
     <div class="mb-3">
-        <label>Place Lost</label><span class="required_item">*</span>
+        <label>Ahantu cyatakariye</label><span class="required_item">*</span>
         <input type="text" name="place" class="form-control double-size" required>
     </div>
 
     <div class="mb-3">
-        <label>Card Photo</label><span style="color: silver; font-size: 0.75rem;color: red;"> (Please hide card personal info <span style="font-weight: bold;font-size: 0.70rem;">Card No, Date of Birth, CVC</span>)</span><span class="required_item"></span>
-        <input type="file" name="photo" class="form-control double-size">
-    </div>
-
-    <div class="mb-3">
-        <label>Your Name</label><span class="required_item">*</span>
+        <label>Amazina yawe</label><span class="required_item">*</span>
         <input type="text" name="poster_name" class="form-control double-size" required>
     </div>
 
     <div class="mb-3">
-        <label>Your Phone</label><span class="required_item">*</span>
-        <input type="text" name="poster_phone" class="form-control double-size" required>
+        <label>Telefoni yawe</label><span class="required_item">*</span>
+        <input type="tel" name="poster_phone" class="form-control double-size" required>
     </div>
 
-    <button class="btn btn-danger double-btn">Report Lost Item</button>
-
+    <button class="btn btn-danger double-btn">Ohereza Amakuru</button>
 </form>
