@@ -37,6 +37,27 @@ app.use((req, res, next) => {
 app.get('/', (req, res) => res.redirect('/items'));
 app.use('/items', itemsRouter);
 
+// Connections to db handling
+app.use((err, req, res, next) => {
+    console.error(err);
+
+    if (
+        err.code === 'ECONNRESET' ||
+        err.code === 'ETIMEDOUT' ||
+        err.code === 'ECONNREFUSED'
+    ) {
+        return res.status(503).render('error');
+    }
+
+    // fallback
+    res.status(500).render('error');
+});
+
+
+// 404 pages handling
+app.use((req, res) => {
+    res.status(404).render('404');
+});
 
 const PORT = 4000;
 app.listen(PORT, () => console.log(`Server listening on ${PORT}`));

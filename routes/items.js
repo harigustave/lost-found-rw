@@ -119,7 +119,7 @@ router.get('/search', async (req, res) => {
         let { type, query } = req.query;
 
         if (!type || !query) {
-            req.flash("error", "Please select a card category and enter a lost card number");
+            req.flash("error", "Mukiriya wacu, Banza uhitemo ubwoko na nimero by'icyangombwa");
             return res.redirect('/items');
         }
 
