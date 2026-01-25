@@ -63,7 +63,8 @@ const createValidators = [
 
 router.post('/create', upload.none(), createValidators, async (req, res) => {
     const errors = validationResult(req);
-    const kindValue = req.body.kind || "found"; // fallback
+    const kindValue = req.body.kind || "found";
+
     if (!errors.isEmpty()) {
         const formView = kindValue === "lost" ? "post_lost" : "post_found";
         return res.status(422).render(formView, {
@@ -72,8 +73,22 @@ router.post('/create', upload.none(), createValidators, async (req, res) => {
         });
     }
 
-    const { kind, item_type, item_name, item_number, place, poster_name, poster_phone } = req.body;
-    // const photo_path = req.file ? `/public/uploads/${req.file.filename}` : null;
+    let {
+        kind,
+        item_type,
+        item_name,
+        item_number,
+        place,
+        poster_name,
+        poster_phone
+    } = req.body;
+
+    // 🔹 Normalize (UPPERCASE) before DB insert
+    item_type   = item_type;
+    item_name   = item_name?.trim().toUpperCase();
+    item_number = item_number?.trim().toUpperCase() || null;
+    place       = place?.trim().toUpperCase();
+    poster_name = poster_name?.trim().toUpperCase();
 
     const insertQuery = `
         INSERT INTO items(
@@ -85,22 +100,32 @@ router.post('/create', upload.none(), createValidators, async (req, res) => {
     `;
 
     await db.query(insertQuery, [
-        kind, item_type, item_name, item_number || null, place,
-        poster_name, poster_phone
+        kind,
+        item_type,
+        item_name,
+        item_number,
+        place,
+        poster_name,
+        poster_phone
     ]);
 
-    req.flash('success', `Murakoze. Gutanga amakuru ku cyangombwa byagenze neza`);
+    req.flash('success', 'Murakoze. Gutanga amakuru ku cyangombwa byagenze neza');
     res.redirect('/items');
 });
 
+
 router.get('/search', async (req, res) => {
     try {
-        const { type, query } = req.query;
+        let { type, query } = req.query;
 
         if (!type || !query) {
             req.flash("error", "Please select a card category and enter a lost card number");
             return res.redirect('/items');
         }
+
+        // 🔹 Normalize inputs
+        type = type;
+        query = query.trim().toUpperCase();
 
         const sql = `
             SELECT * FROM items 
@@ -109,15 +134,14 @@ router.get('/search', async (req, res) => {
             AND item_number = $2
         `;
 
-        const result = await db.query(sql, [type.trim(), query.trim()]);
+        const result = await db.query(sql, [type, query]);
 
         if (result.rows.length === 0) {
             req.flash("error", "Icyangombwa cyanyu nticyiraboneka. Muzongere mushakishe ubutaha");
             return res.redirect('/items');
         }
 
-        // Render the same items page with only matched result
-        res.render('index', {   // <-- your main page template is "index", not "items"
+        res.render('index', {
             items: result.rows,
             currentPage: 1,
             totalPages: 1,
