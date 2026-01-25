@@ -59,6 +59,16 @@
             padding-bottom: 5px;   /* reduced padding */
         }
 
+        .nav-link {
+            color: #ffffff;
+            font-size: 17px;
+        }
+
+        .nav-link.active {
+            color: #F5C857 !important; /* Orange */
+            font-weight: 600;
+        }
+
         .navbar-brand img {
             height: 70px; /* reduced by 10px */
         }
@@ -71,6 +81,11 @@
 
         .navbar-toggler-icon {
             background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255,255,255,1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #F5C857;
+            color: #000;
         }
 
         /* Hide separators on mobile */
@@ -113,29 +128,6 @@
             }
         }
 
-        /* ================= SKELETON ================= */
-        .skeleton {
-            background: linear-gradient(
-                90deg,
-                #e0e0e0 25%,
-                #f2f2f2 37%,
-                #e0e0e0 63%
-            );
-            background-size: 400% 100%;
-            animation: skeleton-loading 1.4s ease infinite;
-            border-radius: 6px;
-        }
-
-        @keyframes skeleton-loading {
-            0% { background-position: 100% 50%; }
-            100% { background-position: 0 50%; }
-        }
-
-        .skeleton-img { height: 220px; width: 100%; }
-        .skeleton-text { height: 14px; margin-bottom: 10px; }
-        .skeleton-text.short { width: 60%; }
-        .skeleton-btn { height: 36px; width: 100%; }
-
         /* Pagination */
         .pagination .page-item.active .page-link {
             background-color: #213448;
@@ -174,21 +166,74 @@
         <div class="collapse navbar-collapse" id="navMenu">
             <ul class="navbar-nav ms-auto align-items-lg-center">
                 <li class="nav-item">
-                    <a href="/" class="nav-link" style="color:#FFFFFF; font-size: 17px;">Ahabanza</a>
+                    <a href="/items"
+                    class="nav-link <%= currentPath === '/items' ? 'active' : '' %>">
+                        Ahabanza
+                    </a>
                 </li>
-                <li class="nav-separator"><span class="nav-link" style="color: #F5C857;">|</span></li>
+
+                <li class="nav-separator"><span class="nav-link" style="color:#F5C857;">|</span></li>
+
                 <li class="nav-item">
-                    <a href="/items/post-lost" class="nav-link" style="color:#FFFFFF; font-size: 17px;">Icyangombwa Cyabuze</a>
+                    <a href="/items/post-lost"
+                    class="nav-link <%= currentPath === '/items/post-lost' ? 'active' : '' %>">
+                        Icyangombwa Cyabuze
+                    </a>
                 </li>
-                <li class="nav-separator"><span class="nav-link" style="color: #F5C857;">|</span></li>
+
+                <li class="nav-separator"><span class="nav-link" style="color:#F5C857;">|</span></li>
+
                 <li class="nav-item">
-                    <a href="/items/post-found" class="nav-link" style="color:#FFFFFF; font-size: 17px;">Icyangombwa Cyabonetse</a>
+                    <a href="/items/post-found"
+                    class="nav-link <%= currentPath === '/items/post-found' ? 'active' : '' %>">
+                        Icyangombwa Cyabonetse
+                    </a>
                 </li>
-                <li class="nav-separator"><span class="nav-link" style="color: #F5C857;">|</span></li>
+
+                <li class="nav-separator"><span class="nav-link" style="color:#F5C857;">|</span></li>
+
                 <li class="nav-item">
-                    <a href="#" class="nav-link" style="color:#FFFFFF; font-size: 17px;">Kuramo Seritifika</a>
+                    <a href="/"
+                    class="nav-link <%= currentPath === '/certificates' ? 'active' : '' %>">
+                        Kuramo Seritifika
+                    </a>
+                </li>
+                
+                <li class="nav-separator"><span class="nav-link" style="color: #F5C857;">|</span></li>
+
+                <!-- 🌍 Language Switch Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="languageDropdown"
+                    role="button" data-bs-toggle="dropdown" aria-expanded="false"
+                    style="color:#FFFFFF; font-size: 17px;">
+                        <img src="/images/flags/rw.png" alt="RW" width="20" height="20" style="margin-right: 5px;">
+                    </a>
+
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
+                        <li>
+                            <a class="dropdown-item" href="?lang=rw">
+                                <img src="/images/flags/rw.png" alt="RW" width="20" height="20" style="margin-right: 5px;">
+                                Kinyarwanda
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item disabled" href="#"
+                            tabindex="-1" aria-disabled="true">
+                                <img src="/images/flags/gb.png" alt="GB" width="20" height="20" style="margin-right: 5px;">
+                                English
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item disabled" href="#"
+                            tabindex="-1" aria-disabled="true">
+                                <img src="/images/flags/fr.png" alt="FR" width="20" height="20" style="margin-right: 5px;">
+                                Français
+                            </a>
+                        </li>
+                    </ul>
                 </li>
             </ul>
+
         </div>
     </div>
 </nav>

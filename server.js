@@ -8,6 +8,7 @@ const session = require('express-session');
 const flash = require('connect-flash');
 
 const app = express();
+
 app.use(helmet());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -27,6 +28,7 @@ app.use(flash());
 
 // make flash messages available in all views
 app.use((req, res, next) => {
+    res.locals.currentPath = req.path;
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
     next();
