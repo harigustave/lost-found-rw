@@ -82,8 +82,16 @@
     <form action="/items/search" method="GET"
           class="row g-2 justify-content-center align-items-center mx-0">
 
-        <div class="col-12 col-md-4">
-            <select name="type" class="form-select search-select w-100" required>
+        <!-- Counter div (separate) -->
+        <div class="col-12 col-md-3 d-flex align-items-center mb-2">
+            <span style="font-weight: bold; color: #213448; white-space: nowrap;">
+                <span style="text-decoration: underline;">Documents Processed:</span> <%= totalDocuments.toLocaleString() %>
+            </span>
+        </div>
+
+        <!-- Select input div -->
+        <div class="col-12 col-md-4 d-flex align-items-center gap-2">
+            <select name="type" class="form-select search-select flex-grow-1" required>
                 <option value="" disabled selected>Hitamo ubwoko bw'icyangombwa</option>
                 <option value="ID Card">Indangamuntu</option>
                 <option value="Passport">Pasiporo</option>

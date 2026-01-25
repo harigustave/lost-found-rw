@@ -6,6 +6,7 @@ const methodOverride = require('method-override');
 const itemsRouter = require('./routes/items');
 const session = require('express-session');
 const flash = require('connect-flash');
+const db = require('./models/db');
 
 const app = express();
 
@@ -31,6 +32,16 @@ app.use((req, res, next) => {
     res.locals.currentPath = req.path;
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
+    next();
+});
+
+app.use(async (req, res, next) => {
+    try {
+        const countResult = await db.query('SELECT COUNT(*) AS total FROM items');
+        res.locals.totalDocuments = countResult.rows[0].total;
+    } catch (err) {
+        res.locals.totalDocuments = 0;
+    }
     next();
 });
 
